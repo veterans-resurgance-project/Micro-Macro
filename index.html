@@ -17,6 +17,23 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-sky-500 selection:text-slate-950">
 
+    <!-- ECOSYSTEM NAVIGATION BAR -->
+    <nav class="bg-slate-900 border-b border-slate-800 px-4 py-3 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs">
+            <div class="flex items-center gap-2 font-bold text-slate-300">
+                <span class="text-emerald-400">🌐</span> Watershed Stewards Ecosystem
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <a href="https://www.outgrowing-ag.org" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 transition font-medium">
+                    🌱 Visit Outgrowing-Ag &rarr;
+                </a>
+                <a href="https://www.watershipstewardsempowering.org" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 transition font-medium">
+                    🌲 Veteran Programs &amp; Mission &rarr;
+                </a>
+            </div>
+        </div>
+    </nav>
+
     <div class="max-w-7xl mx-auto px-4 py-8">
         
         <!-- HEADER -->
@@ -135,6 +152,17 @@
                             <!-- Dynamic output injected here -->
                         </div>
                     </div>
+                </section>
+
+                <!-- CROSS-SITE BRIDGE: OUTGROWING-AG INTEGRATION -->
+                <section style="max-width: 900px; margin: 4rem auto 0 auto; padding: 2.5rem; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 16px; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+                    <h3 style="color: #4ade80; font-size: 1.5rem; margin-top: 0; margin-bottom: 0.75rem;" class="font-heading">Agricultural Diagnostics &amp; Landowner Optimization</h3>
+                    <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.6; max-width: 700px; margin: 0 auto 1.5rem auto;">
+                        Looking for on-farm soil diagnostics, crop optimization, or landowner agreements? Explore our dedicated agricultural operations portal powered by our veteran field teams.
+                    </p>
+                    <a href="https://www.outgrowing-ag.org" target="_blank" style="display: inline-block; background-color: #22c55e; color: #0f172a; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);">
+                        Visit Outgrowing-Ag Portal &rarr;
+                    </a>
                 </section>
 
             </main>
@@ -286,7 +314,6 @@
             const netOperatingMargin = (grossRevenuePerAcre - estimatedExpenses).toFixed(2);
             const systemicAttritionImpact = (foreclosureRate * 2.8 * siloConfig.capIntensity).toFixed(1);
 
-            // --- GENERATE DYNAMIC EXECUTIVE NARRATIVE INTERPRETATION ---
             let healthTag = "stable and resilient";
             if (netOperatingMargin < 150) healthTag = "under severe economic pressure";
             else if (netOperatingMargin < 300) healthTag = "experiencing moderate operational strain";
@@ -333,10 +360,8 @@
             const marketData = historicalDatabase[year] || { baseYield: 100, volatility: 0.1, basePrice: 4.0, shockMultiplier: 1.0 };
             const results = runSimulationLogic({ silo, year, riskPct, infraWeight, foreclosureRate }, marketData);
 
-            // Inject Narrative Analysis
             document.getElementById('narrative-content').innerHTML = results.narrativeText;
 
-            // Inject Technical Logs
             let logHTML = results.outcomeLog.map(line => `<p class="border-l-2 border-emerald-500/50 pl-2 py-0.5">${line}</p>`).join('');
             document.getElementById('log-content').innerHTML = logHTML;
             
