@@ -86,7 +86,7 @@
                             <input type="number" id="infra-weight" value="1.25" step="0.05" min="0.1" max="5.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition">
                         </div>
 
-                        <!-- NEW: Farm Foreclosure / Distress Rate -->
+                        <!-- Farm Foreclosure / Distress Rate -->
                         <div class="space-y-1.5 md:col-span-2">
                             <div class="flex justify-between items-center">
                                 <label for="foreclosure-rate" class="block text-xs font-semibold uppercase tracking-wider text-amber-400">Regional Farm Foreclosure / Attrition Rate (%)</label>
@@ -135,9 +135,7 @@
                         <p class="text-xs text-slate-400 mt-0.5">Real-time relevant articles &amp; situational clips.</p>
                     </div>
 
-                    <!-- Embedded Simulated News Feed Window -->
                     <div class="space-y-4">
-                        <!-- News Card 1 -->
                         <article class="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 space-y-2 hover:border-slate-700 transition">
                             <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono">
                                 <span class="text-sky-400 font-semibold">VALLEY AGRICULTURE</span>
@@ -147,7 +145,6 @@
                             <p class="text-[11px] text-slate-400 line-clamp-2">Grass seed and hazelnut growers weigh consolidation pressures against shifting export demands.</p>
                         </article>
 
-                        <!-- News Card 2 -->
                         <article class="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 space-y-2 hover:border-slate-700 transition">
                             <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono">
                                 <span class="text-emerald-400 font-semibold">FOREST RESTORATION</span>
@@ -157,7 +154,6 @@
                             <p class="text-[11px] text-slate-400 line-clamp-2">Coordinated restoration efforts focus on target shooting lanes and watershed health recovery.</p>
                         </article>
 
-                        <!-- Embedded Video / Media Container Simulation -->
                         <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden">
                             <div class="bg-slate-900 px-3 py-2 border-b border-slate-800 flex items-center justify-between text-[11px] text-slate-300 font-semibold">
                                 <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Live Stream Feed</span>
@@ -178,12 +174,115 @@
         </div>
     </div>
 
-    <!-- Script wiring -->
-    <script type="module">
-        import { historicalDatabase } from './historical_data.js';
-        import { runSimulationLogic } from './engine.js';
+    <!-- Embedded Scripts (No external modules needed, works offline on Android) -->
+    <script>
+        const historicalDatabase = {
+            "housing-labor-crisis": {
+                year: "housing-labor-crisis",
+                displayName: "Rural Housing & Workforce Crunch",
+                baseYield: 85,
+                volatility: 0.22,
+                basePrice: 4.50,
+                shockMultiplier: 1.15
+            },
+            "fuel-spike-2022": {
+                year: "fuel-spike-2022",
+                displayName: "Diesel & Fuel Price Spike Shock",
+                baseYield: 80,
+                volatility: 0.28,
+                basePrice: 5.10,
+                shockMultiplier: 1.65
+            },
+            "trade-tariffs": {
+                year: "trade-tariffs",
+                displayName: "Export Tariffs & Trade Friction",
+                baseYield: 90,
+                volatility: 0.18,
+                basePrice: 3.80,
+                shockMultiplier: 1.20
+            },
+            "pnw-drought": {
+                year: "pnw-drought",
+                displayName: "PNW Drought & Watershed Curtailment",
+                baseYield: 65,
+                volatility: 0.35,
+                basePrice: 6.50,
+                shockMultiplier: 2.00
+            },
+            "2026": {
+                year: "2026",
+                displayName: "2026 Resurgence & Recovery Horizon",
+                baseYield: 100,
+                volatility: 0.12,
+                basePrice: 4.00,
+                shockMultiplier: 1.00
+            },
+            "2007": {
+                year: "2007",
+                displayName: "Global Food & Input Squeeze",
+                baseYield: 88,
+                volatility: 0.20,
+                basePrice: 4.20,
+                shockMultiplier: 1.30
+            }
+        };
 
-        // Live update for slider display
+        function runSimulationLogic(params, marketData) {
+            const { silo, year, riskPct, infraWeight, foreclosureRate } = params;
+
+            let siloMultiplier = 1.0;
+            let sectorName = silo;
+
+            switch(silo) {
+                case 'grass-seed':
+                    sectorName = "Grass Seed & Forage Crops";
+                    siloMultiplier = 0.95;
+                    break;
+                case 'hazelnuts':
+                    sectorName = "Hazelnuts & Orchard Crops";
+                    siloMultiplier = 1.05;
+                    break;
+                case 'berries-produce':
+                    sectorName = "Berries & Diversified Produce";
+                    siloMultiplier = 1.10;
+                    break;
+                case 'small-livestock':
+                    sectorName = "Small-Scale Livestock & Poultry";
+                    siloMultiplier = 0.90;
+                    break;
+                case 'agro-forestry':
+                    sectorName = "Agro-Forestry & Substrate";
+                    siloMultiplier = 1.00;
+                    break;
+                case 'water-infra':
+                    sectorName = "Water Infrastructure & Drip";
+                    siloMultiplier = 0.85;
+                    break;
+                case 'waste-mgmt':
+                    sectorName = "Municipal Waste & Recovery";
+                    siloMultiplier = 0.95;
+                    break;
+            }
+
+            const baseYield = marketData.baseYield || 100;
+            const computedYield = (baseYield * siloMultiplier * infraWeight * (1 - (riskPct / 100))).toFixed(2);
+            const stressAttritionImpact = (foreclosureRate * 2.4).toFixed(2);
+
+            const outcomeLog = [
+                `[INIT] Target Valley Sector: ${sectorName}`,
+                `[SCENARIO] Historical Baseline Loaded: ${marketData.displayName || year}`,
+                `[PARAM] Risk Mitigation Threshold: ${riskPct}% | Infra Weight: ${infraWeight}x`,
+                `[STRESS] Regional Farm Foreclosure Rate Factor: ${foreclosureRate}%`,
+                `[COMPUTE] Volatility Index: ${marketData.volatility || 0.15}`,
+                `[RESULT] Adjusted Sector Yield / Margin Output: ${computedYield} units`,
+                `[ATTRITION] Estimated Asset Distress & Consolidation Drag: -${stressAttritionImpact}%`,
+                `[SUCCESS] Simulation vector matrix successfully compiled.`
+            ];
+
+            return { outcomeLog };
+        }
+
+        // UI Wiring
         const slider = document.getElementById('foreclosure-rate');
         const sliderVal = document.getElementById('foreclosure-val');
         slider.addEventListener('input', (e) => {
@@ -200,7 +299,6 @@
             const marketData = historicalDatabase[year] || { baseYield: 100, volatility: 0.1 };
             const results = runSimulationLogic({ silo, year, riskPct, infraWeight, foreclosureRate }, marketData);
 
-            // Render UI
             let logHTML = results.outcomeLog.map(line => `<p class="border-l-2 border-emerald-500/50 pl-2 py-0.5">${line}</p>`).join('');
             document.getElementById('log-content').innerHTML = logHTML;
             
