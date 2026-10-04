@@ -14,4 +14,53 @@ export const historicalDatabase = {
     "pnw-drought": droughtDustBowl,
     "housing-labor-crisis": housingLaborCrisis,
     "2026": data2026
+export const historicalDatabase = {
+    "housing-labor-crisis": {
+        year: "housing-labor-crisis",
+        displayName: "Rural Housing & Workforce Crunch",
+        baseYield: 85,
+        volatility: 0.22,
+        basePrice: 4.50,
+        shockMultiplier: 1.15
+    },
+    "fuel-spike-2022": {
+        year: "fuel-spike-2022",
+        displayName: "Diesel & Fuel Price Spike Shock",
+        baseYield: 80,
+        volatility: 0.28,
+        basePrice: 5.10,
+        shockMultiplier: 1.65
+    },
+    "trade-tariffs": {
+        year: "trade-tariffs",
+        displayName: "Export Tariffs & Trade Friction",
+        baseYield: 90,
+        volatility: 0.18,
+        basePrice: 3.80,
+        shockMultiplier: 1.20
+    },
+    "pnw-drought": {
+        year: "pnw-drought",
+        displayName: "PNW Drought & Watershed Curtailment",
+        baseYield: 65,
+        volatility: 0.35,
+        basePrice: 6.50,
+        shockMultiplier: 2.00
+    },
+    "2026": {
+        year: "2026",
+        displayName: "2026 Resurgence & Recovery Horizon",
+        baseYield: 100,
+        volatility: 0.12,
+        basePrice: 4.00,
+        shockMultiplier: 1.00
+    },
+    "2007": {
+        year: "2007",
+        displayName: "Global Food & Input Squeeze",
+        baseYield: 88,
+        volatility: 0.20,
+        basePrice: 4.20,
+        shockMultiplier: 1.30
+    }
 };
