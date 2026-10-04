@@ -174,109 +174,122 @@
         </div>
     </div>
 
-    <!-- Embedded Scripts (No external modules needed, works offline on Android) -->
+    <!-- Upgraded Interdependent Simulation Engine -->
     <script>
         const historicalDatabase = {
             "housing-labor-crisis": {
-                year: "housing-labor-crisis",
                 displayName: "Rural Housing & Workforce Crunch",
-                baseYield: 85,
-                volatility: 0.22,
+                baseYield: 82,
+                volatility: 0.24,
                 basePrice: 4.50,
+                laborSensitivity: 1.45,
                 shockMultiplier: 1.15
             },
             "fuel-spike-2022": {
-                year: "fuel-spike-2022",
                 displayName: "Diesel & Fuel Price Spike Shock",
-                baseYield: 80,
-                volatility: 0.28,
+                baseYield: 78,
+                volatility: 0.31,
                 basePrice: 5.10,
+                laborSensitivity: 1.10,
                 shockMultiplier: 1.65
             },
             "trade-tariffs": {
-                year: "trade-tariffs",
                 displayName: "Export Tariffs & Trade Friction",
-                baseYield: 90,
-                volatility: 0.18,
+                baseYield: 88,
+                volatility: 0.19,
                 basePrice: 3.80,
-                shockMultiplier: 1.20
+                laborSensitivity: 1.00,
+                shockMultiplier: 1.25
             },
             "pnw-drought": {
-                year: "pnw-drought",
                 displayName: "PNW Drought & Watershed Curtailment",
-                baseYield: 65,
-                volatility: 0.35,
-                basePrice: 6.50,
-                shockMultiplier: 2.00
+                baseYield: 62,
+                volatility: 0.38,
+                basePrice: 6.80,
+                laborSensitivity: 1.20,
+                shockMultiplier: 2.10
             },
             "2026": {
-                year: "2026",
                 displayName: "2026 Resurgence & Recovery Horizon",
                 baseYield: 100,
                 volatility: 0.12,
                 basePrice: 4.00,
+                laborSensitivity: 0.90,
                 shockMultiplier: 1.00
             },
             "2007": {
-                year: "2007",
                 displayName: "Global Food & Input Squeeze",
-                baseYield: 88,
-                volatility: 0.20,
-                basePrice: 4.20,
-                shockMultiplier: 1.30
+                baseYield: 85,
+                volatility: 0.22,
+                basePrice: 4.30,
+                laborSensitivity: 1.15,
+                shockMultiplier: 1.35
             }
         };
 
         function runSimulationLogic(params, marketData) {
             const { silo, year, riskPct, infraWeight, foreclosureRate } = params;
 
-            let siloMultiplier = 1.0;
-            let sectorName = silo;
-
+            // Define sector-specific capital and risk multipliers
+            let siloConfig = { name: silo, baseCostRatio: 0.60, capIntensity: 1.0 };
             switch(silo) {
                 case 'grass-seed':
-                    sectorName = "Grass Seed & Forage Crops";
-                    siloMultiplier = 0.95;
+                    siloConfig = { name: "Grass Seed & Forage Crops", baseCostRatio: 0.52, capIntensity: 1.1 };
                     break;
                 case 'hazelnuts':
-                    sectorName = "Hazelnuts & Orchard Crops";
-                    siloMultiplier = 1.05;
+                    siloConfig = { name: "Hazelnuts & Orchard Crops", baseCostRatio: 0.68, capIntensity: 1.4 };
                     break;
                 case 'berries-produce':
-                    sectorName = "Berries & Diversified Produce";
-                    siloMultiplier = 1.10;
+                    siloConfig = { name: "Berries & Diversified Produce", baseCostRatio: 0.75, capIntensity: 1.6 };
                     break;
                 case 'small-livestock':
-                    sectorName = "Small-Scale Livestock & Poultry";
-                    siloMultiplier = 0.90;
+                    siloConfig = { name: "Small-Scale Livestock & Poultry", baseCostRatio: 0.70, capIntensity: 1.25 };
                     break;
                 case 'agro-forestry':
-                    sectorName = "Agro-Forestry & Substrate";
-                    siloMultiplier = 1.00;
+                    siloConfig = { name: "Agro-Forestry & Substrate", baseCostRatio: 0.45, capIntensity: 0.9 };
                     break;
                 case 'water-infra':
-                    sectorName = "Water Infrastructure & Drip";
-                    siloMultiplier = 0.85;
+                    siloConfig = { name: "Water Infrastructure & Drip", baseCostRatio: 0.40, capIntensity: 1.5 };
                     break;
                 case 'waste-mgmt':
-                    sectorName = "Municipal Waste & Recovery";
-                    siloMultiplier = 0.95;
+                    siloConfig = { name: "Municipal Waste & Recovery", baseCostRatio: 0.50, capIntensity: 1.0 };
                     break;
             }
 
-            const baseYield = marketData.baseYield || 100;
-            const computedYield = (baseYield * siloMultiplier * infraWeight * (1 - (riskPct / 100))).toFixed(2);
-            const stressAttritionImpact = (foreclosureRate * 2.4).toFixed(2);
+            // --- REAL INTERDEPENDENT ECONOMIC CALCULATIONS ---
+            const volatility = marketData.volatility;
+            const shock = marketData.shockMultiplier;
+
+            // 1. Risk mitigation dampens market volatility penalties, but has a diminishing return
+            const effectiveRiskBuffer = Math.min(riskPct / 100, 0.80);
+            const mitigatedVolatility = volatility * (1 - (effectiveRiskBuffer * 0.7));
+
+            // 2. Infrastructure weight acts as a multiplier on operational efficiency
+            const efficiencyFactor = Math.pow(infraWeight, 0.6);
+
+            // 3. Foreclosure & Distress rate creates compounding regional stress (disrupting supplier networks & raising asset turnover drag)
+            const stressDragFactor = 1.0 - (foreclosureRate / 100) * 1.8 * siloConfig.capIntensity;
+            const normalizedStressDrag = Math.max(stressDragFactor, 0.20); // Floor at 20% residual capacity
+
+            // 4. Compute Gross Yield Output and Net Margin Financials
+            const rawYieldOutput = marketData.baseYield * efficiencyFactor * normalizedStressDrag * (1 - mitigatedVolatility);
+            const adjustedYield = Math.max(rawYieldOutput, 5.0).toFixed(1);
+
+            const grossRevenuePerAcre = (adjustedYield * marketData.basePrice * (2.2 - (shock * 0.2)));
+            const estimatedExpenses = grossRevenuePerAcre * siloConfig.baseCostRatio * shock;
+            const netOperatingMargin = (grossRevenuePerAcre - estimatedExpenses).toFixed(2);
+            
+            const systemicAttritionImpact = (foreclosureRate * 2.8 * siloConfig.capIntensity).toFixed(1);
 
             const outcomeLog = [
-                `[INIT] Target Valley Sector: ${sectorName}`,
-                `[SCENARIO] Historical Baseline Loaded: ${marketData.displayName || year}`,
-                `[PARAM] Risk Mitigation Threshold: ${riskPct}% | Infra Weight: ${infraWeight}x`,
-                `[STRESS] Regional Farm Foreclosure Rate Factor: ${foreclosureRate}%`,
-                `[COMPUTE] Volatility Index: ${marketData.volatility || 0.15}`,
-                `[RESULT] Adjusted Sector Yield / Margin Output: ${computedYield} units`,
-                `[ATTRITION] Estimated Asset Distress & Consolidation Drag: -${stressAttritionImpact}%`,
-                `[SUCCESS] Simulation vector matrix successfully compiled.`
+                `[INIT] Sector Profile: ${siloConfig.name}`,
+                `[BASELINE] Scenario Context: ${marketData.displayName}`,
+                `[INPUT VECTOR] Risk Threshold: ${riskPct}% | Infra Weight: ${infraWeight}x | Foreclosure Stress: ${foreclosureRate}%`,
+                `[ANALYTICS] Volatility Mitigation Index: ${(mitigatedVolatility * 100).toFixed(1)}% (Base: ${(volatility * 100).toFixed(1)}%)`,
+                `[STRESS MODEL] Regional Capital Attrition & Consolidation Drag: -${systemicAttritionImpact}%`,
+                `[PROJECTION] Calculated Sector Yield Volume: ${adjustedYield} metric units/acre`,
+                `[FINANCIALS] Estimated Net Operating Margin: $${netOperatingMargin} per acre unit`,
+                `[STATUS] Vector matrix compiled. Observe variance when tweaking slider parameters.`
             ];
 
             return { outcomeLog };
@@ -296,7 +309,7 @@
             const infraWeight = parseFloat(document.getElementById('infra-weight').value);
             const foreclosureRate = parseFloat(slider.value);
 
-            const marketData = historicalDatabase[year] || { baseYield: 100, volatility: 0.1 };
+            const marketData = historicalDatabase[year] || { baseYield: 100, volatility: 0.1, basePrice: 4.0, shockMultiplier: 1.0 };
             const results = runSimulationLogic({ silo, year, riskPct, infraWeight, foreclosureRate }, marketData);
 
             let logHTML = results.outcomeLog.map(line => `<p class="border-l-2 border-emerald-500/50 pl-2 py-0.5">${line}</p>`).join('');
