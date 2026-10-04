@@ -105,21 +105,35 @@
                 </section>
 
                 <!-- OUTPUT PANEL (Initially Hidden) -->
-                <section id="output-panel" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5" style="display: none;">
+                <section id="output-panel" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6" style="display: none;">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div>
                             <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
-                                <span>📊</span> Simulation Outcome Logs
+                                <span>📊</span> Simulation Outcome Analysis &amp; Logs
                             </h2>
-                            <p class="text-xs text-slate-400 mt-0.5">Vector computation completed successfully.</p>
+                            <p class="text-xs text-slate-400 mt-0.5">Automated narrative interpretation and vector computations.</p>
                         </div>
                         <button id="reset-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-700 transition cursor-pointer">
                             🔄 New Simulation
                         </button>
                     </div>
 
-                    <div id="log-content" class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-2 max-h-96 overflow-y-auto">
-                        <!-- Dynamic output injected here -->
+                    <!-- AI Automated Narrative Analysis Box -->
+                    <div id="narrative-box" class="bg-sky-950/30 border border-sky-500/30 rounded-xl p-4 space-y-3">
+                        <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wide flex items-center gap-1.5">
+                            <span>💡</span> Executive Scenario Narrative
+                        </h3>
+                        <div id="narrative-content" class="text-xs text-slate-200 leading-relaxed space-y-2">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Technical Logs Box -->
+                    <div class="space-y-2">
+                        <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Raw Vector Log Output</h4>
+                        <div id="log-content" class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-2 max-h-64 overflow-y-auto">
+                            <!-- Dynamic output injected here -->
+                        </div>
                     </div>
                 </section>
 
@@ -174,7 +188,7 @@
         </div>
     </div>
 
-    <!-- Upgraded Interdependent Simulation Engine -->
+    <!-- Simulation Engine with Automated Narrative Interpreter -->
     <script>
         const historicalDatabase = {
             "housing-labor-crisis": {
@@ -230,7 +244,6 @@
         function runSimulationLogic(params, marketData) {
             const { silo, year, riskPct, infraWeight, foreclosureRate } = params;
 
-            // Define sector-specific capital and risk multipliers
             let siloConfig = { name: silo, baseCostRatio: 0.60, capIntensity: 1.0 };
             switch(silo) {
                 case 'grass-seed':
@@ -256,30 +269,38 @@
                     break;
             }
 
-            // --- REAL INTERDEPENDENT ECONOMIC CALCULATIONS ---
             const volatility = marketData.volatility;
             const shock = marketData.shockMultiplier;
 
-            // 1. Risk mitigation dampens market volatility penalties, but has a diminishing return
             const effectiveRiskBuffer = Math.min(riskPct / 100, 0.80);
             const mitigatedVolatility = volatility * (1 - (effectiveRiskBuffer * 0.7));
-
-            // 2. Infrastructure weight acts as a multiplier on operational efficiency
             const efficiencyFactor = Math.pow(infraWeight, 0.6);
-
-            // 3. Foreclosure & Distress rate creates compounding regional stress (disrupting supplier networks & raising asset turnover drag)
             const stressDragFactor = 1.0 - (foreclosureRate / 100) * 1.8 * siloConfig.capIntensity;
-            const normalizedStressDrag = Math.max(stressDragFactor, 0.20); // Floor at 20% residual capacity
+            const normalizedStressDrag = Math.max(stressDragFactor, 0.20);
 
-            // 4. Compute Gross Yield Output and Net Margin Financials
             const rawYieldOutput = marketData.baseYield * efficiencyFactor * normalizedStressDrag * (1 - mitigatedVolatility);
             const adjustedYield = Math.max(rawYieldOutput, 5.0).toFixed(1);
 
             const grossRevenuePerAcre = (adjustedYield * marketData.basePrice * (2.2 - (shock * 0.2)));
             const estimatedExpenses = grossRevenuePerAcre * siloConfig.baseCostRatio * shock;
             const netOperatingMargin = (grossRevenuePerAcre - estimatedExpenses).toFixed(2);
-            
             const systemicAttritionImpact = (foreclosureRate * 2.8 * siloConfig.capIntensity).toFixed(1);
+
+            // --- GENERATE DYNAMIC EXECUTIVE NARRATIVE INTERPRETATION ---
+            let healthTag = "stable and resilient";
+            if (netOperatingMargin < 150) healthTag = "under severe economic pressure";
+            else if (netOperatingMargin < 300) healthTag = "experiencing moderate operational strain";
+
+            let foreclosureNote = `Regional farm foreclosures running at ${foreclosureRate}% created a manageable drag.`;
+            if (foreclosureRate > 7) {
+                foreclosureNote = `Crucially, the elevated regional foreclosure rate of ${foreclosureRate}% triggered a heavy ${systemicAttritionImpact}% systemic consolidation drag, fracturing supplier networks and choking overall capacity.`;
+            }
+
+            const narrativeText = `
+                <p>This run examined the <strong>${siloConfig.name}</strong> sector under the <strong>${marketData.displayName}</strong> baseline scenario. With an infrastructure weight factor of <strong>${infraWeight}x</strong> and a risk mitigation buffer of <strong>${riskPct}%</strong>, volatility was successfully dampened to <strong>${(mitigatedVolatility * 100).toFixed(1)}%</strong>.</p>
+                <p>${foreclosureNote} As a result, the sector produced an adjusted yield volume of <strong>${adjustedYield} metric units/acre</strong>, leaving producers with an estimated net operating margin of <strong>$${netOperatingMargin} per acre</strong>.</p>
+                <p class="text-sky-300 font-medium"><em>Executive Takeaway:</em> Overall sector financial health in this simulation is currently <strong>${healthTag}</strong>, highlighting the delicate balance between structural infrastructure support and regional default pressures.</p>
+            `;
 
             const outcomeLog = [
                 `[INIT] Sector Profile: ${siloConfig.name}`,
@@ -289,10 +310,10 @@
                 `[STRESS MODEL] Regional Capital Attrition & Consolidation Drag: -${systemicAttritionImpact}%`,
                 `[PROJECTION] Calculated Sector Yield Volume: ${adjustedYield} metric units/acre`,
                 `[FINANCIALS] Estimated Net Operating Margin: $${netOperatingMargin} per acre unit`,
-                `[STATUS] Vector matrix compiled. Observe variance when tweaking slider parameters.`
+                `[STATUS] Vector matrix successfully compiled and interpreted.`
             ];
 
-            return { outcomeLog };
+            return { outcomeLog, narrativeText };
         }
 
         // UI Wiring
@@ -312,6 +333,10 @@
             const marketData = historicalDatabase[year] || { baseYield: 100, volatility: 0.1, basePrice: 4.0, shockMultiplier: 1.0 };
             const results = runSimulationLogic({ silo, year, riskPct, infraWeight, foreclosureRate }, marketData);
 
+            // Inject Narrative Analysis
+            document.getElementById('narrative-content').innerHTML = results.narrativeText;
+
+            // Inject Technical Logs
             let logHTML = results.outcomeLog.map(line => `<p class="border-l-2 border-emerald-500/50 pl-2 py-0.5">${line}</p>`).join('');
             document.getElementById('log-content').innerHTML = logHTML;
             
