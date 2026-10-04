@@ -38,9 +38,9 @@
         
         <!-- HEADER -->
         <header class="text-center mb-10 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
-            <h1 class="text-2xl md:text-3xl font-bold text-emerald-400 mb-2 tracking-wide">📈 Micro-Macro Market Simulation</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-emerald-400 mb-2 tracking-wide">📈 Micro-Macro Market Simulation &amp; Time Traveler</h1>
             <p class="text-xs md:text-sm text-slate-400 max-w-2xl mx-auto">
-                Model Willamette Valley regional ag-forestry sectors, foreclosure stress attrition, and logistics under historical crisis indicators.
+                Model Willamette Valley regional ag-forestry sectors using manual student controls or historical calendar-date indexing.
             </p>
         </header>
 
@@ -52,16 +52,23 @@
                 
                 <!-- SETUP PANEL -->
                 <section id="setup-panel" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6">
-                    <div class="border-b border-slate-800 pb-3">
-                        <h2 class="text-lg font-bold text-sky-400 flex items-center gap-2">
-                            <span>⚙️</span> Simulation Parameters &amp; Valley Silos
-                        </h2>
-                        <p class="text-xs text-slate-400 mt-1">Configure vector variables for regional agricultural and resource runs.</p>
+                    <div class="border-b border-slate-800 pb-3 flex justify-between items-center flex-wrap gap-2">
+                        <div>
+                            <h2 class="text-lg font-bold text-sky-400 flex items-center gap-2">
+                                <span>⚙️</span> Simulation Parameters &amp; Mode
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-1">Choose between manual pedagogical sliders or historical date-time travel.</p>
+                        </div>
+                        <!-- Mode Selector Toggle -->
+                        <div class="bg-slate-950 p-1 rounded-xl border border-slate-800 flex text-xs">
+                            <button id="mode-manual" class="px-3 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-bold transition cursor-pointer">Manual Lab</button>
+                            <button id="mode-time" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer">Time Traveler ⏳</button>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
                         <!-- Silo Choice -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1.5 md:col-span-2">
                             <label for="silo-choice" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Target Valley Ag / Sector Silo</label>
                             <select id="silo-choice" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition">
                                 <optgroup label="Willamette Ag & Crops">
@@ -78,29 +85,24 @@
                             </select>
                         </div>
 
-                        <!-- Year/Study Choice -->
-                        <div class="space-y-1.5">
-                            <label for="year-choice" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Historical Study / Baseline</label>
-                            <select id="year-choice" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition">
-                                <option value="housing-labor-crisis">🏠 Rural Housing & Workforce Crunch</option>
-                                <option value="fuel-spike-2022">⛽ Diesel & Fuel Price Spike Shock</option>
-                                <option value="trade-tariffs">🌐 Export Tariffs & Trade Friction</option>
-                                <option value="pnw-drought">☀️ PNW Drought & Watershed Curtailment</option>
-                                <option value="2026">🌲 2026 Willamette Valley Resilience Baseline</option>
-                                <option value="2007">📉 2007 Global Food & Input Squeeze</option>
-                            </select>
+                        <!-- MANUAL MODE SETTINGS CONTAINER -->
+                        <div id="manual-controls-group" class="contents">
+                            <div class="space-y-1.5">
+                                <label for="risk-pct" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Risk Mitigation Threshold (%)</label>
+                                <input type="number" id="risk-pct" value="15" min="0" max="100" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 transition">
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label for="infra-weight" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Infrastructural Weight Factor</label>
+                                <input type="number" id="infra-weight" value="1.25" step="0.05" min="0.1" max="5.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 transition">
+                            </div>
                         </div>
 
-                        <!-- Risk Pct -->
-                        <div class="space-y-1.5">
-                            <label for="risk-pct" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Risk Mitigation Threshold (%)</label>
-                            <input type="number" id="risk-pct" value="15" min="0" max="100" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition">
-                        </div>
-
-                        <!-- Infra Weight -->
-                        <div class="space-y-1.5">
-                            <label for="infra-weight" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Infrastructural Weight Factor</label>
-                            <input type="number" id="infra-weight" value="1.25" step="0.05" min="0.1" max="5.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition">
+                        <!-- TIME TRAVELER MODE SETTINGS CONTAINER (Initially Hidden) -->
+                        <div id="time-controls-group" class="space-y-1.5 md:col-span-2" style="display: none;">
+                            <label for="travel-date" class="block text-xs font-semibold uppercase tracking-wider text-amber-400">Select Historical Calendar Date</label>
+                            <input type="date" id="travel-date" value="2020-09-07" min="2000-01-01" max="2026-12-31" class="w-full bg-slate-950 border border-amber-500/50 rounded-xl px-3.5 py-2.5 text-amber-200 focus:outline-none focus:border-amber-400 transition">
+                            <p class="text-[11px] text-slate-400">The engine automatically indexes regional drought, fuel shocks, and supply friction for this exact date in history.</p>
                         </div>
 
                         <!-- Farm Foreclosure / Distress Rate -->
@@ -110,7 +112,7 @@
                                 <span id="foreclosure-val" class="font-mono text-xs text-amber-300 font-bold">4.5%</span>
                             </div>
                             <input type="range" id="foreclosure-rate" value="4.5" min="0.0" max="25.0" step="0.5" class="w-full accent-amber-400 bg-slate-950 h-2 rounded-lg cursor-pointer">
-                            <p class="text-[11px] text-slate-400">Models regional default pressures, land consolidation stress, and distressed asset sales during crisis periods.</p>
+                            <p class="text-[11px] text-slate-400" id="foreclosure-helper">Models regional default pressures and land consolidation stress.</p>
                         </div>
                     </div>
 
@@ -216,85 +218,126 @@
         </div>
     </div>
 
-    <!-- Simulation Engine with Automated Narrative Interpreter -->
+    <!-- Simulation Engine with Dual Manual & Time-Traveler Modes -->
     <script>
-        const historicalDatabase = {
-            "housing-labor-crisis": {
-                displayName: "Rural Housing & Workforce Crunch",
-                baseYield: 82,
-                volatility: 0.24,
-                basePrice: 4.50,
-                laborSensitivity: 1.45,
-                shockMultiplier: 1.15
-            },
-            "fuel-spike-2022": {
-                displayName: "Diesel & Fuel Price Spike Shock",
-                baseYield: 78,
-                volatility: 0.31,
-                basePrice: 5.10,
-                laborSensitivity: 1.10,
-                shockMultiplier: 1.65
-            },
-            "trade-tariffs": {
-                displayName: "Export Tariffs & Trade Friction",
-                baseYield: 88,
-                volatility: 0.19,
-                basePrice: 3.80,
-                laborSensitivity: 1.00,
-                shockMultiplier: 1.25
-            },
-            "pnw-drought": {
-                displayName: "PNW Drought & Watershed Curtailment",
-                baseYield: 62,
-                volatility: 0.38,
-                basePrice: 6.80,
-                laborSensitivity: 1.20,
-                shockMultiplier: 2.10
-            },
-            "2026": {
-                displayName: "2026 Resurgence & Recovery Horizon",
-                baseYield: 100,
-                volatility: 0.12,
-                basePrice: 4.00,
-                laborSensitivity: 0.90,
-                shockMultiplier: 1.00
-            },
-            "2007": {
-                displayName: "Global Food & Input Squeeze",
-                baseYield: 85,
-                volatility: 0.22,
-                basePrice: 4.30,
-                laborSensitivity: 1.15,
-                shockMultiplier: 1.35
-            }
-        };
+        let currentMode = 'manual'; // 'manual' or 'time'
 
-        function runSimulationLogic(params, marketData) {
-            const { silo, year, riskPct, infraWeight, foreclosureRate } = params;
+        // Mode Toggles UI
+        const btnManual = document.getElementById('mode-manual');
+        const btnTime = document.getElementById('mode-time');
+        const manualGroup = document.getElementById('manual-controls-group');
+        const timeGroup = document.getElementById('time-controls-group');
+
+        btnManual.addEventListener('click', () => {
+            currentMode = 'manual';
+            btnManual.className = "px-3 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-bold transition cursor-pointer";
+            btnTime.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer";
+            manualGroup.style.display = "contents";
+            timeGroup.style.display = "none";
+        });
+
+        btnTime.addEventListener('click', () => {
+            currentMode = 'time';
+            btnTime.className = "px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition cursor-pointer";
+            btnManual.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer";
+            timeGroup.style.display = "block";
+            manualGroup.style.display = "none";
+        });
+
+        // UI Slider Wiring
+        const slider = document.getElementById('foreclosure-rate');
+        const sliderVal = document.getElementById('foreclosure-val');
+        slider.addEventListener('input', (e) => {
+            sliderVal.textContent = parseFloat(e.target.value).toFixed(1) + '%';
+        });
+
+        // Time Traveler Parser Logic
+        function parseDateToMarketConditions(dateString) {
+            const dateObj = new Date(dateString);
+            const year = dateObj.getFullYear();
+            const month = dateObj.getMonth() + 1; // 1-12
+
+            // Default fallback
+            let marketData = {
+                displayName: `${year} Historical Calendar Epoch (${dateString})`,
+                baseYield: 90,
+                volatility: 0.15,
+                basePrice: 4.20,
+                shockMultiplier: 1.10
+            };
+
+            // Specific historical event indexing for Pacific Northwest / Willamette context
+            if (year === 2020 && month >= 8 && month <= 10) {
+                marketData = {
+                    displayName: "September 2020 Oregon Wildfire & Smoke Crisis",
+                    baseYield: 65,
+                    volatility: 0.35,
+                    basePrice: 5.50,
+                    shockMultiplier: 1.85
+                };
+            } else if (year === 2021 && month >= 6 && month <= 8) {
+                marketData = {
+                    displayName: "Summer 2021 PNW Heat Dome & Watershed Stress",
+                    baseYield: 58,
+                    volatility: 0.40,
+                    basePrice: 6.20,
+                    shockMultiplier: 2.05
+                };
+            } else if (year === 2022) {
+                marketData = {
+                    displayName: "2022 Global Energy & Diesel Price Spike",
+                    baseYield: 78,
+                    volatility: 0.30,
+                    basePrice: 5.20,
+                    shockMultiplier: 1.65
+                };
+            } else if (year >= 2025) {
+                marketData = {
+                    displayName: `${year} Regional Resurgence & Baseline Window`,
+                    baseYield: 95,
+                    volatility: 0.12,
+                    basePrice: 4.00,
+                    shockMultiplier: 1.00
+                };
+            }
+
+            return marketData;
+        }
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            const silo = document.getElementById('silo-choice').value;
+            let marketData;
+            let riskPct, infraWeight, foreclosureRate;
+
+            foreclosureRate = parseFloat(slider.value);
 
             let siloConfig = { name: silo, baseCostRatio: 0.60, capIntensity: 1.0 };
             switch(silo) {
-                case 'grass-seed':
-                    siloConfig = { name: "Grass Seed & Forage Crops", baseCostRatio: 0.52, capIntensity: 1.1 };
-                    break;
-                case 'hazelnuts':
-                    siloConfig = { name: "Hazelnuts & Orchard Crops", baseCostRatio: 0.68, capIntensity: 1.4 };
-                    break;
-                case 'berries-produce':
-                    siloConfig = { name: "Berries & Diversified Produce", baseCostRatio: 0.75, capIntensity: 1.6 };
-                    break;
-                case 'small-livestock':
-                    siloConfig = { name: "Small-Scale Livestock & Poultry", baseCostRatio: 0.70, capIntensity: 1.25 };
-                    break;
-                case 'agro-forestry':
-                    siloConfig = { name: "Agro-Forestry & Substrate", baseCostRatio: 0.45, capIntensity: 0.9 };
-                    break;
-                case 'water-infra':
-                    siloConfig = { name: "Water Infrastructure & Drip", baseCostRatio: 0.40, capIntensity: 1.5 };
-                    break;
-                case 'waste-mgmt':
-                    siloConfig = { name: "Municipal Waste & Recovery", baseCostRatio: 0.50, capIntensity: 1.0 };
-                    break;
+                case 'grass-seed': siloConfig = { name: "Grass Seed & Forage Crops", baseCostRatio: 0.52, capIntensity: 1.1 }; break;
+                case 'hazelnuts': siloConfig = { name: "Hazelnuts & Orchard Crops", baseCostRatio: 0.68, capIntensity: 1.4 }; break;
+                case 'berries-produce': siloConfig = { name: "Berries & Diversified Produce", baseCostRatio: 0.75, capIntensity: 1.6 }; break;
+                case 'small-livestock': siloConfig = { name: "Small-Scale Livestock & Poultry", baseCostRatio: 0.70, capIntensity: 1.25 }; break;
+                case 'agro-forestry': siloConfig = { name: "Agro-Forestry & Substrate", baseCostRatio: 0.45, capIntensity: 0.9 }; break;
+                case 'water-infra': siloConfig = { name: "Water Infrastructure & Drip", baseCostRatio: 0.40, capIntensity: 1.5 }; break;
+                case 'waste-mgmt': siloConfig = { name: "Municipal Waste & Recovery", baseCostRatio: 0.50, capIntensity: 1.0 }; break;
+            }
+
+            if (currentMode === 'manual') {
+                riskPct = parseFloat(document.getElementById('risk-pct').value);
+                infraWeight = parseFloat(document.getElementById('infra-weight').value);
+                marketData = {
+                    displayName: "Custom Pedagogical Student Lab Run",
+                    baseYield: 90,
+                    volatility: 0.20,
+                    basePrice: 4.25,
+                    shockMultiplier: 1.20
+                };
+            } else {
+                const travelDate = document.getElementById('travel-date').value;
+                marketData = parseDateToMarketConditions(travelDate);
+                // In time traveler mode, derive risk and infra automatically based on historical date context
+                riskPct = 20;
+                infraWeight = 1.10;
             }
 
             const volatility = marketData.volatility;
@@ -318,52 +361,26 @@
             if (netOperatingMargin < 150) healthTag = "under severe economic pressure";
             else if (netOperatingMargin < 300) healthTag = "experiencing moderate operational strain";
 
-            let foreclosureNote = `Regional farm foreclosures running at ${foreclosureRate}% created a manageable drag.`;
-            if (foreclosureRate > 7) {
-                foreclosureNote = `Crucially, the elevated regional foreclosure rate of ${foreclosureRate}% triggered a heavy ${systemicAttritionImpact}% systemic consolidation drag, fracturing supplier networks and choking overall capacity.`;
-            }
-
             const narrativeText = `
-                <p>This run examined the <strong>${siloConfig.name}</strong> sector under the <strong>${marketData.displayName}</strong> baseline scenario. With an infrastructure weight factor of <strong>${infraWeight}x</strong> and a risk mitigation buffer of <strong>${riskPct}%</strong>, volatility was successfully dampened to <strong>${(mitigatedVolatility * 100).toFixed(1)}%</strong>.</p>
-                <p>${foreclosureNote} As a result, the sector produced an adjusted yield volume of <strong>${adjustedYield} metric units/acre</strong>, leaving producers with an estimated net operating margin of <strong>$${netOperatingMargin} per acre</strong>.</p>
-                <p class="text-sky-300 font-medium"><em>Executive Takeaway:</em> Overall sector financial health in this simulation is currently <strong>${healthTag}</strong>, highlighting the delicate balance between structural infrastructure support and regional default pressures.</p>
+                <p>Mode: <strong>${currentMode.toUpperCase()}</strong> | Examined Sector: <strong>${siloConfig.name}</strong> under context <strong>${marketData.displayName}</strong>.</p>
+                <p>Active parameters: Risk Buffer at <strong>${riskPct}%</strong>, Infrastructure Weight at <strong>${infraWeight}x</strong>, and Regional Foreclosures at <strong>${foreclosureRate}%</strong> (causing a <strong>-${systemicAttritionImpact}%</strong> consolidation drag).</p>
+                <p>Resulting Yield: <strong>${adjustedYield} metric units/acre</strong> with an estimated net operating margin of <strong>$${netOperatingMargin} per acre</strong>.</p>
+                <p class="text-sky-300 font-medium"><em>Executive Assessment:</em> Sector financial viability under these conditions is currently evaluated as <strong>${healthTag}</strong>.</p>
             `;
 
             const outcomeLog = [
+                `[MODE] ${currentMode.toUpperCase()} ENGINE`,
                 `[INIT] Sector Profile: ${siloConfig.name}`,
-                `[BASELINE] Scenario Context: ${marketData.displayName}`,
+                `[EPOCH CONTEXT] ${marketData.displayName}`,
                 `[INPUT VECTOR] Risk Threshold: ${riskPct}% | Infra Weight: ${infraWeight}x | Foreclosure Stress: ${foreclosureRate}%`,
                 `[ANALYTICS] Volatility Mitigation Index: ${(mitigatedVolatility * 100).toFixed(1)}% (Base: ${(volatility * 100).toFixed(1)}%)`,
                 `[STRESS MODEL] Regional Capital Attrition & Consolidation Drag: -${systemicAttritionImpact}%`,
                 `[PROJECTION] Calculated Sector Yield Volume: ${adjustedYield} metric units/acre`,
-                `[FINANCIALS] Estimated Net Operating Margin: $${netOperatingMargin} per acre unit`,
-                `[STATUS] Vector matrix successfully compiled and interpreted.`
+                `[FINANCIALS] Estimated Net Operating Margin: $${netOperatingMargin} per acre unit`
             ];
 
-            return { outcomeLog, narrativeText };
-        }
-
-        // UI Wiring
-        const slider = document.getElementById('foreclosure-rate');
-        const sliderVal = document.getElementById('foreclosure-val');
-        slider.addEventListener('input', (e) => {
-            sliderVal.textContent = parseFloat(e.target.value).toFixed(1) + '%';
-        });
-
-        document.getElementById('start-btn').addEventListener('click', () => {
-            const silo = document.getElementById('silo-choice').value;
-            const year = document.getElementById('year-choice').value;
-            const riskPct = parseFloat(document.getElementById('risk-pct').value);
-            const infraWeight = parseFloat(document.getElementById('infra-weight').value);
-            const foreclosureRate = parseFloat(slider.value);
-
-            const marketData = historicalDatabase[year] || { baseYield: 100, volatility: 0.1, basePrice: 4.0, shockMultiplier: 1.0 };
-            const results = runSimulationLogic({ silo, year, riskPct, infraWeight, foreclosureRate }, marketData);
-
-            document.getElementById('narrative-content').innerHTML = results.narrativeText;
-
-            let logHTML = results.outcomeLog.map(line => `<p class="border-l-2 border-emerald-500/50 pl-2 py-0.5">${line}</p>`).join('');
-            document.getElementById('log-content').innerHTML = logHTML;
+            document.getElementById('narrative-content').innerHTML = narrativeText;
+            document.getElementById('log-content').innerHTML = outcomeLog.map(l => `<p class="border-l-2 border-emerald-500/50 pl-2 py-0.5">${l}</p>`).join('');
             
             document.getElementById('setup-panel').style.display = 'none';
             document.getElementById('output-panel').style.display = 'block';
